@@ -1,0 +1,108 @@
+.container {
+  padding: 3em;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.market-list-container {
+  display: flex;
+  width: 100%;
+  padding-top: 5em;
+}
+
+.market-list-form {
+  width: 50%;
+  padding: 2em
+}
+
+.market-list-grid {
+  width: 50%;
+  padding: 2em
+}
+
+form .form-group {
+  margin-bottom: 1em;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+form input[type="text"]{
+  width: 100%;
+  padding: 0.4em;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+}
+
+form select {
+  width: 100%;
+  padding: 0.4em;
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+}
+
+.form-group-inline div{
+  width: 30%;
+}
+
+form button {
+  background-color: blue;
+  padding: 0.5em 1em;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.form-button-export {
+  background-color: green;
+  padding: 0.5em 1em;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 1.2em;
+  float: right;
+}
+
+.market-list-row {
+  width: 100%;
+  display: flex;
+  margin-bottom: 0.2em;
+}
+
+.market-list-row-details {
+  background-color: #EEE;
+  flex-grow: 1;
+  padding: 0.4em 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 0.2em;
+  cursor: pointer;
+}
+
+.market-list-row-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.market-list-row-action a {
+  display: block;
+  cursor: pointer;
+  padding: 1em;
+  background-color: #EF5350;
+  color: white
+}
+
