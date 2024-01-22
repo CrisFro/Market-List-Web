@@ -1,7 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Market } from 'src/models/market.model';
+import jsPDF from 'jspdf';
+import { formatDate } from '@angular/common';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +18,6 @@ export class MarketListsService {
 
   constructor(private readonly http: HttpClient) {}
 
-  //Get all List
   getAllMarketLists(): Observable<Market[]>{
     return this.http.get<Market[]>(this.baseUrl);
   }
@@ -32,12 +35,51 @@ export class MarketListsService {
     return this.http.put<Market>(this.baseUrl + '/' + marketList.id, marketList)
   }
 
-  // exportCsv(marketList: Market): Observable<Market> {
-  //   return this.http.get<Market>(this.baseUrl + 'export' + marketList);
-  // }
+  exportMarketList(): Observable<ArrayBuffer> {
+    const exportUrl = `${this.baseUrl}/export`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/csv'
+    });
 
-  exportCsv() {
-    return this.http.post(this.baseUrl + 'export', {responseType:'blob', observe:'response'});
-}
+    return this.http.post(exportUrl, null, { headers, responseType: 'arraybuffer' });
+  }
+
+  exportMarketListToPDF(marketLists: Market[]): void {
+    const pdf = new jsPDF();
+    const format = 'dd-MM-yyyy hh.mm.ss';
+    const myDate = new Date();
+    const locale = 'pt-BR';
+    const formattedDate = formatDate(myDate, format, locale);
+
+    pdf.setFontSize(18);
+    pdf.text('Lista de Mercado', 20, 20);
+
+    pdf.setFontSize(12);
+    marketLists.forEach((marketList, index) => {
+      const yPos = 30 + (index + 1) * 10; // Ajuste de posição
+      pdf.text(`${marketList.productType}: ${marketList.productDescription}`, 20, yPos);
+    });
+
+
+    pdf.save('ListaDeMercado - ' + formattedDate + '.pdf');
+  }
+
+  exportMarketListToTxt(marketLists: Market[]): void {
+    const title = 'Lista de Mercado';
+    const listContent = marketLists.map(marketList => `${marketList.productType}: ${marketList.productDescription}`).join('\n');
+    const txtContent = `${title}\n\n${listContent}`;
+
+    const blob = new Blob([txtContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    const format = 'dd-MM-yyyy hh.mm.ss';
+    const myDate = new Date();
+    const locale = 'pt-BR';
+    const formattedDate = formatDate(myDate, format, locale);
+    link.download = 'Lista De Mercado - ' + formattedDate + '.txt';
+    link.click();
+  }
+
 
 }

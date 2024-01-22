@@ -1,48 +1,65 @@
 <div class="container">
   <h1>Lista de Compras</h1>
-
   <div class="market-list-container">
-    <div class="market-list-form">
-      <form #form="ngForm" (ngSubmit)="onSubmit()">
+    <div class="market-list-form mat-card">
+      <form [formGroup]="marketForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label for="">Tipo de Produto</label>
-
-          <!-- <input type="text" name="productType" [(ngModel)] ="marketList.productType"/> -->
-          <select id="productType" name="productType" [(ngModel)]="marketList.productType">
-            <option value="Café da manhã/Padaria">Café da manhã/Padaria</option>
-            <option value="Mercearia">Mercearia</option>
-            <option value="Bebidas">Bebidas</option>
-            <option value="Carnes e frios">Carnes e frios</option>
-            <option value="Produtos de limpeza">Produtos de limpeza</option>
-            <option value="Higiene pessoal">Higiene pessoal</option>
-            <option value="Frutas e legumes">Frutas e legumes</option>
-            <option value="Pet">Pet</option>
-          </select>
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo de Produto</mat-label>
+            <mat-select formControlName="productType" placeholder="Selecione uma opção">
+              <mat-option *ngFor="let option of productTypeOptions" [value]="option">{{ option }}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="form-group">
-          <label for="">Descrição</label>
-          <input type="text" name="ProductDescription" [(ngModel)] ="marketList.productDescription"/>
+          <mat-form-field appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <input matInput formControlName="productDescription">
+          </mat-form-field>
         </div>
         <div class="form-group">
-          <button>Save</button>
+          <button
+            mat-raised-button
+            class="form-button-add"
+            type="submit"
+            [disabled]="marketForm.invalid"
+          >
+            Adicionar
+          </button>
         </div>
-        <div>
-        </div>
+        <div></div>
       </form>
-
     </div>
     <div class="market-list-grid">
-
       <div class="market-list-row" *ngFor="let marketList of marketLists">
         <div class="market-list-row-details" (click)="populateForm(marketList)">
-          <span>{{marketList.productType}}</span>
-          <span>{{marketList.productDescription}}</span>
+          <div class="product-type">
+            <span class="product-type-title">{{ marketList.productType }}</span>
+            <span class="product-description" maxlength="25">{{ marketList.productDescription.slice(0, 40) }}</span>
+          </div>
         </div>
         <div class="market-list-row-action">
-          <a (click)="deleteMarketList(marketList.id)"><i class="fa-solid fa-trash-can"></i></a>
+          <div class="btn-edit">
+            <a (click)="openEditModal(marketList)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </a>
+          </div>
+          <div class="btn-delete">
+            <a (click)="deleteMarketList(marketList.id)">
+              <i class="fa-solid fa-trash-can"></i>
+            </a>
+          </div>
         </div>
       </div>
-      <a (click)="exportCsv()" class="form-button-export"><i class="fas fa-file-excel"></i> Exportar</a>
+
+      <button mat-raised-button class="form-button-exportPdf" (click)="exportMarketListToPDF()">
+        <i class="fas fa-file-pdf"></i> Exportar PDF
+      </button>
+      <button mat-raised-button class="form-button-exportTxt" (click)="exportToTxt()">
+        <i class="fas fa-file-alt"></i> Exportar TXT
+      </button>
+      <button mat-raised-button class="form-button-export" (click)="exportMarketListToExcel()">
+        <i class="fas fa-file-excel"></i> Exportar Csv
+      </button>
     </div>
-  </div>
 </div>

@@ -5,4 +5,5 @@ export interface Market {
     productType: string;
 
     productDescription: string;
+
 }
